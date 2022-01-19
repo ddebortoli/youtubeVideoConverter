@@ -1,0 +1,102 @@
+{% extends "layoutInvoice.html" %}
+
+{% block body %}
+  <div class="row">
+    <div class="col-sm-3">
+      {% with messages = get_flashed_messages()  %}
+      {% if messages %}
+      {% for message in messages %}
+        {%if 'Error' in message%}
+        <div class="alert alert-success alert-danger fade show" role="alert">
+        {%else%}
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {%endif%}
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      {% endfor %}
+      {% endif %}
+      {% endwith %}
+      <div class="card card-body">
+        <form action="{{url_for('invoice_add')}}" method="POST">
+          <div class="form-group">
+            <input type="text" class="form-control" name="fullname" placeholder="FullName">
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control" name="phone" placeholder="Phone">
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control" name="email" placeholder="Email">
+          </div>
+           <div class="form-group">
+            <input type="text" class="form-control" name="adress" placeholder="Adress">
+          </div>
+          <div class="form-group">
+            <select class="form-control" name="location">
+              {%for location in locations%}
+              <option value={{location.0}}>{{location.1}}</option>
+              {%endfor%}
+            </select>
+          </div>
+          <div class="form-group">
+            <select class="form-control" name="package">
+              {%for package in packages%}
+              <option value={{package.0}}>{{package.1}}</option>
+              {%endfor%}
+            </select>
+          </div>
+          <div class="form-group">
+            <select class="form-control" name="paymentId">
+              {%for payment in payments%}
+              <option value={{payment.0}}>{{payment.1}}</option>
+              {%endfor%}
+            </select>
+          </div>
+        
+          <button class="btn btn-primary btn-block">
+            Save 
+          </button>
+        </form>
+      </div>
+    </div>
+    <div class="col-sm-9" style="overflow:scroll;">
+      <table class="table table-striped table-hover table-bordered table-sm bg-white">
+        <thead>
+          <tr>
+            <td><strong>ID</strong></td>
+            <td><strong>fullname</strong></td>
+            <td><strong>phone</strong></td>
+            <td><strong>email</strong></td>
+            <td><strong>adress</strong></td>
+            <td><strong>location</strong></td>
+            <td><strong>package</strong></td>
+            <td><strong>paymentMethod</strong></td>
+            <td><strong>operations</strong></td>
+          </tr>
+        </thead>
+        <tbody>
+          {% for client in clients %}
+          <tr>
+            <td>{{client.0}}</td>
+            <td>{{client.1}}</td>
+            <td>{{client.2}}</td>
+            <td>{{client.3}}</td>
+            <td>{{client.4}}</td>
+            <td>{{client.5}}</td>
+            <td>{{client.6}}</td>
+            <td>{{client.7}}</td>
+            <td>
+              <a href="/invoice/edit/{{client.0}}" class="btn btn-warning">edit</a>
+              <a href="/invoice/delete/{{client.0}}" class="btn btn-danger btn-delete">delete</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  </div>
+
+{%endblock%}
